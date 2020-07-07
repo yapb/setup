@@ -1,6 +1,6 @@
 //
 // YaPB - Counter-Strike Bot based on PODBot by Markus Klinge.
-// Copyright © 2004-2020 YaPB Development Team <team@yapb.ru>.
+// Copyright В© 2004-2020 YaPB Development Team <team@yapb.ru>.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -82,29 +82,29 @@ private:
 
 private:
    void regLangTab () {
-      m_data[Russian][SelectExeFile] = "Выберите hl.exe";
-      m_data[Russian][Install] = "Установить";
-      m_data[Russian][Browse] = "Обзор";
+      m_data[Russian][SelectExeFile] = "Р’С‹Р±РµСЂРёС‚Рµ hl.exe";
+      m_data[Russian][Install] = "РЈСЃС‚Р°РЅРѕРІРёС‚СЊ";
+      m_data[Russian][Browse] = "РћР±Р·РѕСЂ";
       m_data[Russian][Version] = "YaPB v%s";
-      m_data[Russian][Cancel] = "Отмена";
-      m_data[Russian][Application] = "Установка YaPB";
-      m_data[Russian][FileDamaged] = "Установщик поврежден.\n\nПожалуйста получите новую копию установщика at https://yapb.ru/files/\n\nОшибка: %s";
+      m_data[Russian][Cancel] = "РћС‚РјРµРЅР°";
+      m_data[Russian][Application] = "РЈСЃС‚Р°РЅРѕРІРєР° YaPB";
+      m_data[Russian][FileDamaged] = "РЈСЃС‚Р°РЅРѕРІС‰РёРє РїРѕРІСЂРµР¶РґРµРЅ.\n\nРџРѕР¶Р°Р»СѓР№СЃС‚Р° РїРѕР»СѓС‡РёС‚Рµ РЅРѕРІСѓСЋ РєРѕРїРёСЋ СѓСЃС‚Р°РЅРѕРІС‰РёРєР° at https://yapb.ru/files/\n\nРћС€РёР±РєР°: %s";
       m_data[Russian][CopyingFiles] = "(%d/%d): %s%s";
-      m_data[Russian][PatchingFiles] = "Правка Файлов";
-      m_data[Russian][Exit] = "Выход";
-      m_data[Russian][Done] = "OK. Нажмите Выход";
+      m_data[Russian][PatchingFiles] = "РџСЂР°РІРєР° Р¤Р°Р№Р»РѕРІ";
+      m_data[Russian][Exit] = "Р’С‹С…РѕРґ";
+      m_data[Russian][Done] = "OK. РќР°Р¶РјРёС‚Рµ Р’С‹С…РѕРґ";
       m_data[Russian][LicenseInfo] = "YaPB Setup v2.0 (" __DATE__ " " __TIME__ ")";
-      m_data[Russian][CancelCopy] = "Вы уверены, что хотите отменить установку ботов?";
-      m_data[Russian][SelectHLExeFile] = "Исполняемый файл Half-Life (hl.exe/hlds.exe)\0hl.exe;hlds.exe\0";
-      m_data[Russian][CannotPatchFiles] = "Невозможно записать изменения в liblist.gam/plugins.ini. Вам придется сделать это самостоятельно.";
-      m_data[Russian][BadGameDirectory] = "В этой папке нету ничего похожего на CS... Попробуйте другую...";
-      m_data[Russian][CannotOpenArchive] = "Невозможно открыть архив установки.";
+      m_data[Russian][CancelCopy] = "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ РѕС‚РјРµРЅРёС‚СЊ СѓСЃС‚Р°РЅРѕРІРєСѓ Р±РѕС‚РѕРІ?";
+      m_data[Russian][SelectHLExeFile] = "РСЃРїРѕР»РЅСЏРµРјС‹Р№ С„Р°Р№Р» Half-Life (hl.exe/hlds.exe)\0hl.exe;hlds.exe\0";
+      m_data[Russian][CannotPatchFiles] = "РќРµРІРѕР·РјРѕР¶РЅРѕ Р·Р°РїРёСЃР°С‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІ liblist.gam/plugins.ini. Р’Р°Рј РїСЂРёРґРµС‚СЃСЏ СЃРґРµР»Р°С‚СЊ СЌС‚Рѕ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ.";
+      m_data[Russian][BadGameDirectory] = "Р’ СЌС‚РѕР№ РїР°РїРєРµ РЅРµС‚Сѓ РЅРёС‡РµРіРѕ РїРѕС…РѕР¶РµРіРѕ РЅР° CS... РџРѕРїСЂРѕР±СѓР№С‚Рµ РґСЂСѓРіСѓСЋ...";
+      m_data[Russian][CannotOpenArchive] = "РќРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ Р°СЂС…РёРІ СѓСЃС‚Р°РЅРѕРІРєРё.";
       m_data[Russian][InfoText] =
-         "Установка YaPB для CS.\r\n"
+         "РЈСЃС‚Р°РЅРѕРІРєР° YaPB РґР»СЏ CS.\r\n"
          "\r\n"
-         "Выберите папку с игрой и нажмите установить.\r\n"
+         "Р’С‹Р±РµСЂРёС‚Рµ РїР°РїРєСѓ СЃ РёРіСЂРѕР№ Рё РЅР°Р¶РјРёС‚Рµ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ.\r\n"
          "\r\n"
-         "Удачных фрагов!\r\n";
+         "РЈРґР°С‡РЅС‹С… С„СЂР°РіРѕРІ!\r\n";
 
       m_data[English][SelectExeFile] = "Select hl.exe";
       m_data[English][Install] = "Install";
