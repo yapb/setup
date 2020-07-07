@@ -371,16 +371,16 @@ public:
    }
 
    void patchLang (StringRef target, StringRef mod) {
-      auto ubotConfig = strings.format ("%s\\%s\\addons\\ubot\\conf\\ubot.cfg", target, mod);
-      clearReadOnly (ubotConfig);
+      auto botConfig = strings.format ("%s\\%s\\addons\\ubot\\conf\\ubot.cfg", target, mod);
+      clearReadOnly (botConfig);
 
       String line, contents;
-      File fp (ubotConfig, "rt");
+      File fp (botConfig, "rt");
 
       if (!fp) {
          return;
       }
-      constexpr StringRef cvarName = "ub_language";
+      constexpr StringRef cvarName = "yb_language";
 
       while (fp.getLine (line)) {
          if (!line.contains (cvarName)) {
@@ -393,7 +393,7 @@ public:
       }
       fp.close ();
 
-      if (fp.open (ubotConfig, "wt")) {
+      if (fp.open (botConfig, "wt")) {
          fp.puts (contents.chars ());
          fp.close ();
       }
