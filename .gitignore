@@ -1,0 +1,8 @@
+*.dll
+*.user
+*.aps
+
+vc/Release
+vc/Debug
+vc/.vs
+vc/enc_temp_folder
