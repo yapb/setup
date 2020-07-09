@@ -371,7 +371,7 @@ public:
    }
 
    void patchLang (StringRef target, StringRef mod) {
-      auto botConfig = strings.format ("%s\\%s\\addons\\ubot\\conf\\ubot.cfg", target, mod);
+      auto botConfig = strings.format ("%s\\%s\\addons\\yapb\\conf\\yapb.cfg", target, mod);
       clearReadOnly (botConfig);
 
       String line, contents;
