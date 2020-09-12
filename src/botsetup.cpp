@@ -53,10 +53,10 @@ struct Static : public Singleton <Static> {
    HWND tip = nullptr;
    HANDLE mutex = nullptr;
 
-   volatile bool install = false;
-   volatile bool pause = false;
-   volatile bool test = false;
-   volatile bool imageSet = false;
+   bool install = false;
+   bool pause = false;
+   bool test = true;
+   bool imageSet = false;
 };
 
 CR_EXPOSE_GLOBAL_SINGLETON (Static, global);
@@ -262,9 +262,22 @@ public:
    }
 
    void patchModFiles (StringRef target, StringRef mod) {
+      auto liblist = strings.format ("%s\\%s\\liblist.gam", target, mod);
+
+      // no liblist - no fun
+      if (!File::exists (liblist)) {
+         return;
+      }
       auto plugins = strings.format ("%s\\%s\\addons\\metamod\\plugins.ini", target, mod);
 
-      if (File::exists (plugins)) {
+      // load liblist into buffer, and check whether metamod is there (even if commented out currently)
+      int32 size = 0;
+      auto buffer = MemFileStorage::defaultLoad (liblist, &size);
+
+      String liblistBuffer (reinterpret_cast <const char *> (buffer));
+      MemFileStorage::defaultUnload (buffer);
+
+      if (File::exists (plugins) && liblistBuffer.contains ("metamod")) {
          makeFileBackup (plugins);
          clearReadOnly (plugins);
 
@@ -295,40 +308,38 @@ public:
                warning (lang.tr (Lang::CannotPatchFiles));
             }
          }
+         return;
       }
-      auto liblist = strings.format ("%s\\%s\\liblist.gam", target, mod);
 
-      if (File::exists (liblist)) {
-         makeFileBackup (liblist);
-         clearReadOnly (liblist);
+      makeFileBackup (liblist);
+      clearReadOnly (liblist);
 
-         String line, contents;
-         File fp (liblist, "rt");
+      String line, contents;
+      File fp (liblist, "rt");
 
-         if (fp) {
-            auto gamedll = false;
+      if (fp) {
+         auto gamedll = false;
 
-            while (fp.getLine (line)) {
-               if (!line.contains ("gamedll")) {
-                  contents += line;
-               }
-               else if (!gamedll) {
-                  contents += "gamedll \"addons\\yapb\\bin\\yapb.dll\"\n";
-                  contents += "gamedll_linux \"addons/yapb/bin/yapb.so\"\n";
-                  contents += "gamedll_osx \"addons/yapb/bin/yapb.dylib\"\n";
-
-                  gamedll = true;
-               }
+         while (fp.getLine (line)) {
+            if (!line.contains ("gamedll")) {
+               contents += line;
             }
+            else if (!gamedll) {
+               contents += "gamedll \"addons\\yapb\\bin\\yapb.dll\"\n";
+               contents += "gamedll_linux \"addons/yapb/bin/yapb.so\"\n";
+               contents += "gamedll_osx \"addons/yapb/bin/yapb.dylib\"\n";
+
+               gamedll = true;
+            }
+         }
+         fp.close ();
+
+         if (fp.open (liblist, "wt")) {
+            fp.puts (contents.chars ());
             fp.close ();
-
-            if (fp.open (liblist, "wt")) {
-               fp.puts (contents.chars ());
-               fp.close ();
-            }
-            else {
-               warning (lang.tr (Lang::CannotPatchFiles));
-            }
+         }
+         else {
+            warning (lang.tr (Lang::CannotPatchFiles));
          }
       }
    }
