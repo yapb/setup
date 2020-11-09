@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   botsetup_x86_win32:
     name: Build Botsetup
-    runs-on: yapb
+    runs-on: self-hosted
     
     steps:
       - uses: actions/checkout@v2
