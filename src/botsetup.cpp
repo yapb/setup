@@ -230,7 +230,6 @@ public:
       m_hz = OpenZip (sfx, nullptr);
 
       if (!m_hz) {
-         MessageBox (0, "0", 0, 0);
          abort (lang.tr (Lang::CannotOpenArchive));
       }
       auto buffer = strings.chars ();
@@ -243,7 +242,6 @@ public:
       m_botVersion.assign (buffer);
 
       if (m_botVersion.empty ()) {
-         MessageBox (0, "1", 0, 0);
          abort (lang.tr (Lang::CannotOpenArchive));
       }
    }
