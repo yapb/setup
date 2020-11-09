@@ -18,8 +18,8 @@ jobs:
       - name: Build
         run: ninja -C botsetup_x86_win32 -v
 
-      - name: Compress
-        run: upx -9 botsetup_x86_win32/botsetup.exe
+      - name: Compress & Strip
+        run: strip botsetup_x86_win32/botsetup.exe && upx -9 botsetup_x86_win32/botsetup.exe
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
@@ -33,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.run_id }}
+          release_name: Release ${{ github.run_id }}
           draft: false
           prerelease: false
           
