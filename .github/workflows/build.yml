@@ -20,10 +20,7 @@ jobs:
 
       - name: Compress
         run: upx -9 botsetup_x86_win32/botsetup.exe
-
-      - name: Build
-        run: ninja -C build
-
+        
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
