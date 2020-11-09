@@ -47,6 +47,9 @@
     <ClCompile Include="..\ext\unzip\unzip.cpp" />
     <ClCompile Include="..\src\botsetup.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\res\botsetup.xml" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A8277C1F-6F49-4AF2-8E9B-9CD45B36B7EB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -80,9 +83,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <EmbedManifest>false</EmbedManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <EmbedManifest>false</EmbedManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

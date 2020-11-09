@@ -3,6 +3,7 @@
 #undef UNICODE
 #undef _UNICODE
 
+
 // THIS FILE is almost entirely based upon code by Jean-loup Gailly
 // and Mark Adler. It has been modified by Lucian Wischik.
 // The modifications were: incorporate the bugfixes of 1.1.4, allow
@@ -76,7 +77,6 @@
 #define ZIP_HANDLE   1
 #define ZIP_FILENAME 2
 #define ZIP_MEMORY   3
-
 
 #define zmalloc(len) malloc(len)
 
@@ -2530,7 +2530,7 @@ typedef struct
 */
 uLong certsign_length = 0;
 
-#include <Imagehlp.h>
+#include <imagehlp.h>
 
 LUFILE *lufopen(void *z,unsigned int len,DWORD flags,ZRESULT *err)
 { if (flags!=ZIP_HANDLE && flags!=ZIP_FILENAME && flags!=ZIP_MEMORY) {*err=ZR_ARGS; return NULL;}

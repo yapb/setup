@@ -14,17 +14,16 @@
 
 using namespace cr;
 
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' " "version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"") 
-
-#pragma comment (lib, "comctl32.lib")
-#pragma comment (lib, "imagehlp.lib")
-#pragma comment (lib, "gdiplus.lib")
-#pragma comment (lib, "msimg32.lib")
+#if !defined(CR_CXX_GCC)
+#  pragma comment (lib, "comctl32.lib")
+#  pragma comment (lib, "imagehlp.lib")
+#  pragma comment (lib, "gdiplus.lib")
+#  pragma comment (lib, "msimg32.lib")
+#endif
 
 #include "windows.h"
 #include "windowsx.h"
 #include "resource.h"
-#include "unzip.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,6 +34,8 @@ using namespace cr;
 
 #include <objidl.h>
 #include <gdiplus.h>
+
+#include <unzip/unzip.h>
 
 using namespace Gdiplus;
 
@@ -229,6 +230,7 @@ public:
       m_hz = OpenZip (sfx, nullptr);
 
       if (!m_hz) {
+         MessageBox (0, "0", 0, 0);
          abort (lang.tr (Lang::CannotOpenArchive));
       }
       auto buffer = strings.chars ();
@@ -241,6 +243,7 @@ public:
       m_botVersion.assign (buffer);
 
       if (m_botVersion.empty ()) {
+         MessageBox (0, "1", 0, 0);
          abort (lang.tr (Lang::CannotOpenArchive));
       }
    }
@@ -486,7 +489,7 @@ public:
       SetDlgItemTextA (global.hwnd, IDC_STATUS, strings.format (lang.tr (Lang::CopyingFiles), num, inst.getFileCount (), dst, ext));
       Sleep (30);
 
-      if (num == inst.getFileCount ()) {
+      if (num == static_cast <uint32> (inst.getFileCount ())) {
          SetDlgItemTextA (global.hwnd, IDC_STATUS, lang.tr (Lang::PatchingFiles));
          Sleep (800);
       }
@@ -550,7 +553,7 @@ public:
    }
 
 
-   static DWORD CR_STDCALL thread (CONST LPVOID lpParam) {
+   static DWORD CR_STDCALL thread (CONST LPVOID) {
       auto &inst = BotSetup::instance ();
       global.install = true;
 
@@ -590,13 +593,13 @@ public:
       ExitThread (EXIT_SUCCESS);
    }
 
-   void addTooltip (char *text, int32 id) {
+   void addTooltip (StringRef text, int32 id) {
       TOOLINFO ti {};
       ti.cbSize = sizeof (TOOLINFO);
       ti.uFlags = TTF_SUBCLASS | TTF_IDISHWND;
       ti.hwnd = global.hwnd;
       ti.uId = (WPARAM)GetDlgItem (global.hwnd, id);
-      ti.lpszText = text;
+      ti.lpszText = const_cast <LPSTR> (text.chars ());
 
       SendMessageA (global.tip, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
    };
@@ -667,7 +670,7 @@ public:
       m_hand = LoadCursorA (nullptr, IDC_HAND);
    }
 
-   void handleMouseMove (WPARAM w, LPARAM l) {
+   void handleMouseMove (WPARAM, LPARAM l) {
       m_urls.foreach ([&] (const int32 &key, const auto &) {
          auto hwnd = GetDlgItem (global.hwnd, key);
 
@@ -677,7 +680,7 @@ public:
       });
    }
 
-   void handleMouseDown (WPARAM w, LPARAM l) {
+   void handleMouseDown (WPARAM, LPARAM l) {
       m_urls.foreach ([&] (const int32 &key, const Callback &cb) {
          auto hwnd = GetDlgItem (global.hwnd, key);
 
