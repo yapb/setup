@@ -4,8 +4,8 @@ on: [push, pull_request]
 
 jobs:
   botsetup_x86_win32:
-    name: Build BotSetup
-    runs-on: ubuntu-latest
+    name: Build Botsetup
+    runs-on: self-hosted
     
     steps:
       - uses: actions/checkout@v2
