@@ -48,7 +48,7 @@ struct Static : public Singleton <Static> {
 
    bool install = false;
    bool pause = false;
-   bool test = true;
+   bool test = false;
    bool imageSet = false;
 };
 
