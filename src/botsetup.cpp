@@ -97,7 +97,7 @@ private:
       m_data[Russian][Version] = "YaPB v%s";
       m_data[Russian][Cancel] = "Отмена";
       m_data[Russian][Application] = "Установка YaPB";
-      m_data[Russian][FileDamaged] = "Установщик поврежден.\n\nПожалуйста получите новую копию установщика at https://yapb.ru/files/\n\nОшибка: %s";
+      m_data[Russian][FileDamaged] = "Установщик поврежден.\n\nПожалуйста получите новую копию установщика at https://latest.yapb.ru/\n\nОшибка: %s";
       m_data[Russian][CopyingFiles] = "(%d/%d): %s%s";
       m_data[Russian][PatchingFiles] = "Правка Файлов";
       m_data[Russian][Exit] = "Выход";
@@ -121,7 +121,7 @@ private:
       m_data[English][Version] = "YaPB v%s";
       m_data[English][Cancel] = "Cancel";
       m_data[English][Application] = "YaPB Setup";
-      m_data[English][FileDamaged] = "Setup corrupted.\n\nPlease obtain new copy of installer at https://yapb.ru/files/\n\nError: %s";
+      m_data[English][FileDamaged] = "Setup corrupted.\n\nPlease obtain new copy of installer at https://latest.yapb.ru/\n\nError: %s";
       m_data[English][CopyingFiles] = "(%d/%d): %s%s";
       m_data[English][PatchingFiles] = "Patching Files";
       m_data[English][Exit] = "Exit";
