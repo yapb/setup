@@ -2526,7 +2526,7 @@ typedef struct
 * allows us to sign sfx after it was packed
 *
 * 10.05.2015
-* d@entix.io
+* dmitry@jeefo.net
 */
 uLong certsign_length = 0;
 
@@ -2555,7 +2555,7 @@ LUFILE *lufopen(void *z,unsigned int len,DWORD flags,ZRESULT *err)
      * get all the certificates length that SFX has been signed with
      *
      * 10.05.2015
-     * d@entix.io
+     * dmitry@jeefo.net
      */
      DWORD count = 0;
      DWORD indexes[128];

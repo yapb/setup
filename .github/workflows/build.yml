@@ -6,7 +6,7 @@ on:
 
 jobs:
   botsetup_x86_win32:
-    name: Build Botsetup
+    name: botsetup
     runs-on: windows-latest
     
     steps:
