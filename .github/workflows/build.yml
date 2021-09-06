@@ -5,27 +5,27 @@ on: [push, pull_request]
 jobs:
   botsetup_x86_win32:
     name: Build Botsetup
-    runs-on: self-hosted
+    runs-on: windows-latest
     
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
 
-      - name: Setup Meson
-        run: meson setup botsetup_x86_win32 --cross-file /actions/meson/linux-mingw-w64-32bit.txt 
-
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+        with:
+          vs-version: '16.8'
+          
       - name: Build
-        run: ninja -C botsetup_x86_win32 -v
-
-      - name: Compress & Strip
-        run: strip botsetup_x86_win32/botsetup.exe && upx -9 botsetup_x86_win32/botsetup.exe
+        run: |
+          msbuild "vc/botsetup.sln" -p:Configuration="Release" /t:Clean,Build /p:Platform=Win32 /p:PlatformToolset=v140_xp /p:XPDeprecationWarning=false
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: botsetup.exe
-          path: botsetup_x86_win32/botsetup.exe
+          path: vc/Release/botsetup.exe
           
       - name: Create Release
         id: create_release
