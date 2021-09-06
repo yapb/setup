@@ -1,31 +1,33 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
 
 jobs:
   botsetup_x86_win32:
     name: Build Botsetup
-    runs-on: self-hosted
+    runs-on: windows-latest
     
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
 
-      - name: Setup Meson
-        run: meson setup botsetup_x86_win32 --cross-file /actions/meson/linux-mingw-w64-32bit.txt 
-
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+        with:
+          vs-version: '16.11'
+          
       - name: Build
-        run: ninja -C botsetup_x86_win32 -v
-
-      - name: Compress & Strip
-        run: strip botsetup_x86_win32/botsetup.exe && upx -9 botsetup_x86_win32/botsetup.exe
+        run: |
+          msbuild "vc/botsetup.sln" -p:Configuration="Release" /t:Clean,Build /p:Platform=x86 /p:PlatformToolset=v141_xp /p:XPDeprecationWarning=false
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: botsetup.exe
-          path: botsetup_x86_win32/botsetup.exe
+          path: vc/Release/botsetup.exe
           
       - name: Create Release
         id: create_release
@@ -45,6 +47,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./botsetup_x86_win32/botsetup.exe
+          asset_path: ./vc/Release/botsetup.exe
           asset_name: botsetup.exe
           asset_content_type: application/octet-stream
