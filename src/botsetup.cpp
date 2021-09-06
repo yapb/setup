@@ -195,7 +195,7 @@ public:
       MessageBoxA (GetActiveWindow (), strings.format (lang.tr (Lang::FileDamaged), args...), lang.tr (Lang::Application), MB_ICONSTOP | MB_TOPMOST);
       ExitProcess (EXIT_FAILURE);
    }
-   
+
    template <typename ...Args> void warning (Args &&...args) {
       MessageBoxA (GetActiveWindow (), strings.format (args...), lang.tr (Lang::Application), MB_ICONWARNING | MB_TOPMOST);
    }
@@ -367,12 +367,11 @@ public:
             if (filename[0] == '.' || !(search.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                continue;
             }
-            
+
             if (isCSBinary (target, filename)) {
                result.emplace (filename);
             }
-         }
-         while (FindNextFileA (handle, &search));
+         } while (FindNextFileA (handle, &search));
       }
       return result;
    }
@@ -392,7 +391,7 @@ public:
       while (fp.getLine (line)) {
          if (!line.contains (cvarName)) {
             contents.append (line);
-            
+
          }
          else {
             contents.appendf ("%s \"%s\"\n", cvarName, lang.getLang () == Lang::Russian ? "ru" : "en");
@@ -429,8 +428,8 @@ public:
       return m_fileCount;
    }
 
-    const char *getBotVersion (void) {
-       return m_botVersion.empty () ? "<null>" : m_botVersion.chars ();
+   const char *getBotVersion (void) {
+      return m_botVersion.empty () ? "<null>" : m_botVersion.chars ();
    }
 
    void extract (StringRef target, StringRef mod, SetupCallback fn) {
@@ -537,7 +536,7 @@ public:
             stream->Release ();
 
             bm->GetHICON (&result);
-           
+
             return result;
          }
          GlobalUnlock (buffer);
@@ -596,10 +595,10 @@ public:
       ti.cbSize = sizeof (TOOLINFO);
       ti.uFlags = TTF_SUBCLASS | TTF_IDISHWND;
       ti.hwnd = global.hwnd;
-      ti.uId = (WPARAM)GetDlgItem (global.hwnd, id);
+      ti.uId = (WPARAM) GetDlgItem (global.hwnd, id);
       ti.lpszText = const_cast <LPSTR> (text.chars ());
 
-      SendMessageA (global.tip, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
+      SendMessageA (global.tip, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &ti);
    };
 
    static void detectSetupDirectory (void) {
@@ -710,10 +709,10 @@ public:
       m_urls[id] = action;
 
       auto font = CreateFontA (-w, h,
-         lf.lfEscapement, lf.lfOrientation, FW_DEMIBOLD,
-         lf.lfItalic, 1, lf.lfStrikeOut, lf.lfCharSet,
-         lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
-         lf.lfPitchAndFamily, lf.lfFaceName);
+                               lf.lfEscapement, lf.lfOrientation, FW_DEMIBOLD,
+                               lf.lfItalic, 1, lf.lfStrikeOut, lf.lfCharSet,
+                               lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
+                               lf.lfPitchAndFamily, lf.lfFaceName);
 
       SendMessageA (GetDlgItem (global.hwnd, id), WM_SETFONT, (WPARAM) font, 0);
    }
@@ -723,7 +722,7 @@ CR_EXPOSE_GLOBAL_SINGLETON (BotSetup, setup);
 CR_EXPOSE_GLOBAL_SINGLETON (UrlWrap, urls);
 
 LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
-   auto enableTransparency = [](HWND hwnd, BYTE opacity) {
+   auto enableTransparency = [] (HWND hwnd, BYTE opacity) {
       auto wl = GetWindowLongA (hwnd, GWL_EXSTYLE);
 
       if (opacity < 100) {
@@ -744,7 +743,8 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
    static HBRUSH whiteBrush = CreateSolidBrush (RGB (255, 255, 255));
 
    switch (message) {
-   case WM_INITDIALOG: {
+   case WM_INITDIALOG:
+   {
       global.hwnd = hwnd;
 
       global.tip = CreateWindowExA (WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL, TTS_NOPREFIX | TTS_BALLOON, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, global.inst, NULL);
@@ -757,21 +757,21 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
       if (GetLastError () == ERROR_ALREADY_EXISTS) {
          PostQuitMessage (EXIT_FAILURE);
       }
-     
+
       SetWindowTextA (hwnd, lang.tr (Lang::Application));
 
       LOGFONT lf;
       GetObjectA (GetStockObject (DEFAULT_GUI_FONT), sizeof (LOGFONT), &lf);
 
       auto fontSmall = CreateFontA (lf.lfHeight, 4,
-         lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
-         lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
-         lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
-         lf.lfPitchAndFamily, lf.lfFaceName);
+                                    lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
+                                    lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
+                                    lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
+                                    lf.lfPitchAndFamily, lf.lfFaceName);
 
-      SendMessageA (GetDlgItem (hwnd, IDC_EDIT2), WM_SETFONT, (WPARAM)fontSmall, 0);
+      SendMessageA (GetDlgItem (hwnd, IDC_EDIT2), WM_SETFONT, (WPARAM) fontSmall, 0);
 
-      SetClassLongA (hwnd, GCL_HICON, (LONG)LoadIcon (global.inst, MAKEINTRESOURCE (IDI_ICON)));
+      SetClassLongA (hwnd, GCL_HICON, (LONG) LoadIcon (global.inst, MAKEINTRESOURCE (IDI_ICON)));
 
       enableTransparency (hwnd, 75);
       SetDlgItemTextA (hwnd, IDC_BOTVER, strings.format (lang.tr (Lang::Version), setup.getBotVersion ()));
@@ -792,26 +792,28 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
    }
    break;
 
-   case WM_TIMER: {
+   case WM_TIMER:
+   {
       KillTimer (hwnd, 1);
       BotSetup::detectSetupDirectory ();
    }
    break;
 
    case WM_ACTIVATEAPP:
-   case WM_PAINT: {
+   case WM_PAINT:
+   {
       auto icon = setup.loadPNG (IDB_PNG1);
 
       if (icon) {
          SetLayeredWindowAttributes (hwnd, 255, 255, LWA_COLORKEY);
          DrawIconEx (GetDC (hwnd), 0, 0, icon, 0, 0, 0, NULL, DI_NORMAL | DI_IMAGE | DI_MASK);
 
-         auto display = [&](uint32 id) {
+         auto display = [&] (uint32 id) {
             auto itm = GetDlgItem (hwnd, id);
             enableTransparency (itm, 100);
          };
 
-         for (const auto &itm : IntArray{ IDCANCEL, IDOK, IDC_PROGRESS1, IDC_BROWSE, IDC_EDIT2, IDC_STATUS, IDC_BOTVER, IDC_TEXT_INFO }) {
+         for (const auto &itm : IntArray { IDCANCEL, IDOK, IDC_PROGRESS1, IDC_BROWSE, IDC_EDIT2, IDC_STATUS, IDC_BOTVER, IDC_TEXT_INFO }) {
             display (itm);
          }
       }
@@ -834,7 +836,8 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
          CreateThread (nullptr, 0, &BotSetup::thread, nullptr, 0, nullptr);
          break;
 
-      case IDC_BROWSE: {
+      case IDC_BROWSE:
+      {
          OPENFILENAME ofn {};
          auto filename = strings.chars ();
 
@@ -876,7 +879,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
       }
       break;
 
-   case WM_MOUSEMOVE: 
+   case WM_MOUSEMOVE:
       urls.handleMouseMove (wParam, lParam);
       break;
 
@@ -885,7 +888,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
       break;
 
    case WM_CTLCOLORSTATIC:
-      SetBkMode ((HDC)wParam, TRANSPARENT);
+      SetBkMode ((HDC) wParam, TRANSPARENT);
       SetTextColor (GetDC (HWND (lParam)), RGB (255, 255, 255));
 
       urls.handleColorStatic (HWND (lParam), wParam);
@@ -895,7 +898,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
          SetTextColor (HDC (wParam), RGB (34, 0, 204));
       }
       else if (HWND (lParam) == GetDlgItem (hwnd, IDC_EDIT2)) {
-         SetBkMode ((HDC)wParam, TRANSPARENT);
+         SetBkMode ((HDC) wParam, TRANSPARENT);
          SetTextColor (GetDC (HWND (lParam)), RGB (255, 255, 255));
       }
       return (INT_PTR) whiteBrush;
@@ -929,9 +932,9 @@ int CR_STDCALL WinMain (HINSTANCE instance, HINSTANCE, LPSTR, int) {
    InitCommonControlsEx (&controls);
 
    global.inst = instance;
-   global.hwnd = CreateDialogA (global.inst, MAKEINTRESOURCE (IDD_SETUP_DIALOG), nullptr,  (DLGPROC) installerProcedure);
+   global.hwnd = CreateDialogA (global.inst, MAKEINTRESOURCE (IDD_SETUP_DIALOG), nullptr, (DLGPROC) installerProcedure);
 
-   ShowWindow (global.hwnd,  SW_SHOW);
+   ShowWindow (global.hwnd, SW_SHOW);
 
    Twin <BOOL, MSG> pump;
 
