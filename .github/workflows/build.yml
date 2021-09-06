@@ -19,7 +19,7 @@ jobs:
           
       - name: Build
         run: |
-          msbuild "vc/botsetup.sln" -p:Configuration="Release" /t:Clean,Build /p:Platform=Win32 /p:PlatformToolset=v141_xp /p:XPDeprecationWarning=false
+          msbuild "vc/botsetup.sln" -p:Configuration="Release" /t:Clean,Build /p:Platform=x86 /p:PlatformToolset=v141_xp /p:XPDeprecationWarning=false
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
