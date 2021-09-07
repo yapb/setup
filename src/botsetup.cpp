@@ -152,6 +152,13 @@ public:
 
 public:
    void trySet () {
+      auto legacy = [] () {
+         return DWORD ((LOBYTE (LOWORD (GetVersion ())))) <= 5;
+      };
+
+      if (legacy ()) {
+         return;
+      }
       auto lcid = GetUserDefaultLCID ();
 
       if (lcid == 1049 || lcid == 1059 || lcid == 1058) {
@@ -722,7 +729,7 @@ CR_EXPOSE_GLOBAL_SINGLETON (BotSetup, setup);
 CR_EXPOSE_GLOBAL_SINGLETON (UrlWrap, urls);
 
 LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
-   auto enableTransparency = [] (HWND hwnd, BYTE opacity) {
+   auto enableTransparency = [&] (HWND hwnd, BYTE opacity) {
       auto wl = GetWindowLongA (hwnd, GWL_EXSTYLE);
 
       if (opacity < 100) {
@@ -746,7 +753,6 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
    case WM_INITDIALOG:
    {
       global.hwnd = hwnd;
-
       global.tip = CreateWindowExA (WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL, TTS_NOPREFIX | TTS_BALLOON, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, global.inst, NULL);
 
       urls.push (IDC_BOTVER, [&] () {
@@ -757,7 +763,6 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
       if (GetLastError () == ERROR_ALREADY_EXISTS) {
          PostQuitMessage (EXIT_FAILURE);
       }
-
       SetWindowTextA (hwnd, lang.tr (Lang::Application));
 
       LOGFONT lf;
@@ -769,7 +774,12 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
                                     lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
                                     lf.lfPitchAndFamily, lf.lfFaceName);
 
+      auto fontDialog = CreateFontA (8, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET,
+                                     OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+                                     DEFAULT_PITCH | FF_DONTCARE, lf.lfFaceName);
+
       SendMessageA (GetDlgItem (hwnd, IDC_EDIT2), WM_SETFONT, (WPARAM) fontSmall, 0);
+      SendMessageA (hwnd, WM_SETFONT, (WPARAM) fontDialog, 0);
 
       SetClassLongA (hwnd, GCL_HICON, (LONG) LoadIcon (global.inst, MAKEINTRESOURCE (IDI_ICON)));
 

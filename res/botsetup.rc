@@ -72,7 +72,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 IDD_SETUP_DIALOG DIALOGEX 0, 0, 261, 126
 STYLE DS_SETFONT | DS_CENTER | WS_POPUP | WS_VISIBLE
-FONT 8, "Segoe UI", 400, 0, 0xCC
+FONT 8, "Tahoma", 400, 0, 0xCC
 BEGIN
     DEFPUSHBUTTON   "Install",IDOK,141,101,59,14,WS_DISABLED
     EDITTEXT        IDC_EDIT2,143,16,105,13,ES_LOWERCASE | ES_AUTOHSCROLL | ES_READONLY
@@ -124,7 +124,7 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "YaPB Development Team"
+            VALUE "CompanyName", "YaPB Project"
             VALUE "FileDescription", "YaPB Setup"
             VALUE "FileVersion", "2.0"
             VALUE "InternalName", "botsetup"
