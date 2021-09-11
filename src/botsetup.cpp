@@ -10,7 +10,7 @@
 #undef UNICODE
 #undef _UNICODE
 
-#include <crlib/cr-complete.h>
+#include <crlib/crlib.h>
 
 using namespace cr;
 
