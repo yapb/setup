@@ -131,7 +131,8 @@ BEGIN
             VALUE "LegalCopyright", "yapb@jeefo.net"
             VALUE "OriginalFilename", "botsetup.exe"
             VALUE "ProductName", "YaPB"
-            VALUE "ProductVersion", "4.0"
+            VALUE "ProductVersion", "4.3"
+            VALUE "Comment", "https://yapb.jeefo.net/"
         END
     END
     BLOCK "VarFileInfo"

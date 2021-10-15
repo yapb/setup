@@ -97,7 +97,7 @@ private:
       m_data[Russian][Version] = "YaPB v%s";
       m_data[Russian][Cancel] = "Отмена";
       m_data[Russian][Application] = "Установка YaPB";
-      m_data[Russian][FileDamaged] = "Установщик поврежден.\n\nПожалуйста получите новую копию установщика at https://latest.yapb.ru/\n\nОшибка: %s";
+      m_data[Russian][FileDamaged] = "Установщик поврежден.\n\nПожалуйста получите новую копию установщика at https://yapb.jeefo.net/latest/\n\nОшибка: %s";
       m_data[Russian][CopyingFiles] = "(%d/%d): %s%s";
       m_data[Russian][PatchingFiles] = "Правка Файлов";
       m_data[Russian][Exit] = "Выход";
@@ -121,7 +121,7 @@ private:
       m_data[English][Version] = "YaPB v%s";
       m_data[English][Cancel] = "Cancel";
       m_data[English][Application] = "YaPB Setup";
-      m_data[English][FileDamaged] = "Setup corrupted.\n\nPlease obtain new copy of installer at https://latest.yapb.ru/\n\nError: %s";
+      m_data[English][FileDamaged] = "Setup corrupted.\n\nPlease obtain new copy of installer at https://yapb.jeefo.net/latest\n\nError: %s";
       m_data[English][CopyingFiles] = "(%d/%d): %s%s";
       m_data[English][PatchingFiles] = "Patching Files";
       m_data[English][Exit] = "Exit";
@@ -294,7 +294,7 @@ public:
 
             contents += "\n";
             contents += "; Added by YaPB Setup\n";
-            contents += "; See: https://yapb.ru/\n";
+            contents += "; See: https://yapb.jeefo.net/\n";
             contents += "win32 addons\\yapb\\bin\\yapb.dll YaPB for Counter-Strike\n";
             contents += "linux addons/yapb/bin/yapb.so YaPB for Counter-Strike\n";
             contents += "osx addons/yapb/bin/yapb.dylib YaPB for Counter-Strike\n";
@@ -756,7 +756,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
       global.tip = CreateWindowExA (WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL, TTS_NOPREFIX | TTS_BALLOON, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, global.inst, NULL);
 
       urls.push (IDC_BOTVER, [&] () {
-         ShellExecuteA (hwnd, "open", "https://yapb.ru", nullptr, nullptr, SW_SHOWNORMAL);
+         ShellExecuteA (hwnd, "open", "https://yapb.jeefo.net", nullptr, nullptr, SW_SHOWNORMAL);
       });
       global.mutex = CreateMutexA (nullptr, TRUE, "BotSetupMutexHandle");
 
@@ -798,7 +798,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
       SetTimer (hwnd, 1, 350, 0);
 
       setup.addTooltip (const_cast <char *> (lang.tr (Lang::SelectExeFile)), IDC_BROWSE);
-      setup.addTooltip ("https://yapb.ru/", IDC_BOTVER);
+      setup.addTooltip ("https://yapb.jeefo.net/", IDC_BOTVER);
    }
    break;
 
