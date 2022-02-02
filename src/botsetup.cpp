@@ -1,6 +1,6 @@
 //
 // YaPB - Counter-Strike Bot based on PODBot by Markus Klinge.
-// Copyright © 2004-2022 YaPB Project <yapb@jeefo.net>.
+// Copyright В© 2004-2022 YaPB Project <yapb@jeefo.net>.
 //
 // SPDX-License-Identifier: MIT
 // 
@@ -50,6 +50,31 @@ struct Static : public Singleton <Static> {
    bool pause = false;
    bool test = false;
    bool imageSet = false;
+
+   wchar_t title[32];
+
+public:
+   WCHAR *m2s (const char *str) {
+      constexpr auto MaxBuffers = 12;
+
+      static wchar_t buf[MaxBuffers][1024];
+      static int rtr = 0;
+
+      static wchar_t *ret = buf[rtr];
+      ret[0] = 0;
+
+      if (++rtr > MaxBuffers - 1) {
+         rtr = 0;
+      }
+
+      const auto len = strnlen (str, 1023);
+      const auto chars = MultiByteToWideChar (CP_UTF8, 0, str, len, NULL, 0);
+
+      MultiByteToWideChar (CP_UTF8, 0, str, len, ret, chars);
+      ret[chars] = L'\0';
+
+      return ret;
+   }
 };
 
 CR_EXPOSE_GLOBAL_SINGLETON (Static, global);
@@ -78,11 +103,11 @@ public:
       Done,
       LicenseInfo,
       CancelCopy,
-      SelectHLExeFile,
       CannotPatchFiles,
       BadGameDirectory,
       CannotOpenArchive,
-      InfoText
+      InfoText,
+      InfoText2
    };
 
 private:
@@ -91,29 +116,34 @@ private:
 
 private:
    void regLangTab () {
-      m_data[Russian][SelectExeFile] = "Выберите hl.exe";
-      m_data[Russian][Install] = "Установить";
-      m_data[Russian][Browse] = "Обзор";
+      m_data[Russian][SelectExeFile] = "Р’С‹Р±РµСЂРёС‚Рµ hl.exe";
+      m_data[Russian][Install] = "РЈСЃС‚Р°РЅРѕРІРёС‚СЊ";
+      m_data[Russian][Browse] = "РћР±Р·РѕСЂ";
       m_data[Russian][Version] = "YaPB v%s";
-      m_data[Russian][Cancel] = "Отмена";
-      m_data[Russian][Application] = "Установка YaPB";
-      m_data[Russian][FileDamaged] = "Установщик поврежден.\n\nПожалуйста получите новую копию установщика at https://yapb.jeefo.net/latest/\n\nОшибка: %s";
+      m_data[Russian][Cancel] = "РћС‚РјРµРЅР°";
+      m_data[Russian][Application] = "РЈСЃС‚Р°РЅРѕРІРєР° YaPB";
+      m_data[Russian][FileDamaged] = "РЈСЃС‚Р°РЅРѕРІС‰РёРє РїРѕРІСЂРµР¶РґРµРЅ.\n\nРџРѕР¶Р°Р»СѓР№СЃС‚Р° РїРѕР»СѓС‡РёС‚Рµ РЅРѕРІСѓСЋ РєРѕРїРёСЋ СѓСЃС‚Р°РЅРѕРІС‰РёРєР° РЅР°:\n\n https://yapb.jeefo.net/latest/\n\nРћС€РёР±РєР°: %s";
       m_data[Russian][CopyingFiles] = "(%d/%d): %s%s";
-      m_data[Russian][PatchingFiles] = "Правка Файлов";
-      m_data[Russian][Exit] = "Выход";
-      m_data[Russian][Done] = "OK. Нажмите Выход";
+      m_data[Russian][PatchingFiles] = "РџСЂР°РІРєР° Р¤Р°Р№Р»РѕРІ";
+      m_data[Russian][Exit] = "Р’С‹С…РѕРґ";
+      m_data[Russian][Done] = "OK. РќР°Р¶РјРёС‚Рµ Р’С‹С…РѕРґ";
       m_data[Russian][LicenseInfo] = "YaPB Setup v2.0 (" __DATE__ " " __TIME__ ")";
-      m_data[Russian][CancelCopy] = "Вы уверены, что хотите отменить установку ботов?";
-      m_data[Russian][SelectHLExeFile] = "Исполняемый файл Half-Life (hl.exe/hlds.exe)\0hl.exe;hlds.exe\0";
-      m_data[Russian][CannotPatchFiles] = "Невозможно записать изменения в liblist.gam/plugins.ini. Вам придется сделать это самостоятельно.";
-      m_data[Russian][BadGameDirectory] = "В этой папке нету ничего похожего на CS... Попробуйте другую...";
-      m_data[Russian][CannotOpenArchive] = "Невозможно открыть архив установки.";
+      m_data[Russian][CancelCopy] = "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ РѕС‚РјРµРЅРёС‚СЊ СѓСЃС‚Р°РЅРѕРІРєСѓ Р±РѕС‚РѕРІ?";
+      m_data[Russian][CannotPatchFiles] = "РќРµРІРѕР·РјРѕР¶РЅРѕ Р·Р°РїРёСЃР°С‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІ liblist.gam/plugins.ini. Р’Р°Рј РїСЂРёРґРµС‚СЃСЏ СЃРґРµР»Р°С‚СЊ СЌС‚Рѕ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ.";
+      m_data[Russian][BadGameDirectory] = "Р’ СЌС‚РѕР№ РїР°РїРєРµ РЅРµС‚Сѓ РЅРёС‡РµРіРѕ РїРѕС…РѕР¶РµРіРѕ РЅР° CS... РџРѕРїСЂРѕР±СѓР№С‚Рµ РґСЂСѓРіСѓСЋ...";
+      m_data[Russian][CannotOpenArchive] = "РќРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ Р°СЂС…РёРІ СѓСЃС‚Р°РЅРѕРІРєРё.";
       m_data[Russian][InfoText] =
-         "Установка YaPB для CS.\r\n"
+         "РЈСЃС‚Р°РЅРѕРІРєР° YaPB РґР»СЏ CS.\r\n"
          "\r\n"
-         "Выберите папку с игрой и нажмите установить.\r\n"
+         "Р’С‹Р±РµСЂРёС‚Рµ РїР°РїРєСѓ СЃ РёРіСЂРѕР№ Рё РЅР°Р¶РјРёС‚Рµ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ.\r\n"
          "\r\n"
-         "Удачных фрагов!\r\n";
+         "РЈРґР°С‡РЅС‹С… С„СЂР°РіРѕРІ!\r\n";
+      m_data[Russian][InfoText2] =
+         "РЈРґР°С‡РЅС‹С… С„СЂР°РіРѕРІ!\r\n"
+         "\r\n"
+         "Р•СЃР»Рё Сѓ РІР°СЃ РµСЃС‚СЊ РІРѕРїСЂРѕСЃС‹, РѕР±СЂР°С‰Р°Р№С‚РµСЃСЊ.\r\n"
+         "\r\n"
+         "https://github.com/yapb/yapb\r\n";
 
       m_data[English][SelectExeFile] = "Select hl.exe";
       m_data[English][Install] = "Install";
@@ -121,14 +151,13 @@ private:
       m_data[English][Version] = "YaPB v%s";
       m_data[English][Cancel] = "Cancel";
       m_data[English][Application] = "YaPB Setup";
-      m_data[English][FileDamaged] = "Setup corrupted.\n\nPlease obtain new copy of installer at https://yapb.jeefo.net/latest\n\nError: %s";
+      m_data[English][FileDamaged] = "Setup corrupted.\n\nPlease obtain new copy of installer at:\n\nhttps://yapb.jeefo.net/latest\n\nError: %s";
       m_data[English][CopyingFiles] = "(%d/%d): %s%s";
       m_data[English][PatchingFiles] = "Patching Files";
       m_data[English][Exit] = "Exit";
       m_data[English][Done] = "OK. Press Exit";
       m_data[English][LicenseInfo] = "YaPB Setup v2.0 (" __DATE__ " " __TIME__ ")";
       m_data[English][CancelCopy] = "Are you sure you want to cancel installation?";
-      m_data[English][SelectHLExeFile] = "Half-Life Executable (hl.exe/hlds.exe)\0hl.exe;hlds.exe\0";
       m_data[English][CannotPatchFiles] = "Unable to write changes to liblist.gam/plugins.ini. You have to modify these files yourself.";
       m_data[English][BadGameDirectory] = "There is no CS-compatible mods detected in this dir. Please select something better...";
       m_data[English][CannotOpenArchive] = "Unable to open installer archive.";
@@ -138,6 +167,12 @@ private:
          "Please select location of your game, then press install.\r\n"
          "\r\n"
          "Good luck! And have fun!\r\n";
+      m_data[English][InfoText2] =
+         "Have fun!\r\n"
+         "\r\n"
+         "РЎontact us, if you're have any questions.\r\n"
+         "\r\n"
+         "https://github.com/yapb/yapb\r\n";
    }
 
 public:
@@ -150,8 +185,12 @@ public:
       return m_data[m_lang][code].chars ();
    }
 
+   decltype (auto) trw (const uint32 code) {
+      return global.m2s (tr (code));
+   }
+
 public:
-   void trySet () {
+   void startup () {
       auto legacy = [] () {
          return DWORD ((LOBYTE (LOWORD (GetVersion ())))) <= 5;
       };
@@ -178,13 +217,13 @@ public:
             global.test = true;
          }
       }
+      wcscpy (global.title, trw (Lang::Application));
    }
 
    uint32 getLang () const {
       return m_lang;
    }
 };
-
 
 CR_EXPOSE_GLOBAL_SINGLETON (Lang, lang);
 
@@ -199,12 +238,17 @@ private:
 
 public:
    template <typename ...Args> void __declspec (noreturn) abort (Args &&...args) {
-      MessageBoxA (GetActiveWindow (), strings.format (lang.tr (Lang::FileDamaged), args...), lang.tr (Lang::Application), MB_ICONSTOP | MB_TOPMOST);
+      MessageBoxW (GetActiveWindow (), global.m2s (strings.format (lang.tr (Lang::FileDamaged), args...)), global.title, MB_ICONSTOP | MB_TOPMOST);
       ExitProcess (EXIT_FAILURE);
    }
 
    template <typename ...Args> void warning (Args &&...args) {
-      MessageBoxA (GetActiveWindow (), strings.format (args...), lang.tr (Lang::Application), MB_ICONWARNING | MB_TOPMOST);
+      MessageBoxW (GetActiveWindow (), global.m2s (strings.format (args...)), global.title, MB_ICONWARNING | MB_TOPMOST);
+   }
+
+
+   template <typename ...Args> void error (Args &&...args) {
+      MessageBoxW (GetActiveWindow (), global.m2s (strings.format (args...)), global.title, MB_ICONEXCLAMATION | MB_TOPMOST);
    }
 
    bool dirExists (StringRef dirname) const {
@@ -225,7 +269,14 @@ public:
    }
 
 public:
-   BotSetup () : m_hz (nullptr) {
+   BotSetup () : m_hz (nullptr) { }
+
+   ~BotSetup () {
+      CloseZipU (m_hz);
+      m_hz = nullptr;
+   }
+
+   void startup () {
       auto sfx = strings.chars ();
 
       if (global.test) {
@@ -251,10 +302,6 @@ public:
       if (m_botVersion.empty ()) {
          abort (lang.tr (Lang::CannotOpenArchive));
       }
-   }
-
-   ~BotSetup () {
-      CloseZipU (m_hz);
    }
 
    void clearReadOnly (StringRef target) {
@@ -431,11 +478,11 @@ public:
       return true;
    }
 
-   int getFileCount (void) const {
+   int getFileCount () const {
       return m_fileCount;
    }
 
-   const char *getBotVersion (void) {
+   const char *getBotVersion () {
       return m_botVersion.empty () ? "<null>" : m_botVersion.chars ();
    }
 
@@ -478,23 +525,27 @@ public:
       return output;
    }
 
+   static void setText (const int item, const char *text) {
+      SetDlgItemTextW (global.hwnd, item, global.m2s (text));
+   }
+
 public:
    static void progress (StringRef file, uint32 num) {
       const auto &inst = BotSetup::instance ();
 
-      SendMessageA (GetDlgItem (global.hwnd, IDC_PROGRESS1), PBM_SETRANGE, 0, MAKELPARAM (0, inst.getFileCount () + 1));
-      SendMessageA (GetDlgItem (global.hwnd, IDC_PROGRESS1), PBM_SETSTEP, 1, 0);
-      SendMessageA (GetDlgItem (global.hwnd, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
+      SendMessageW (GetDlgItem (global.hwnd, IDC_PROGRESS_BAR), PBM_SETRANGE, 0, MAKELPARAM (0, inst.getFileCount () + 1));
+      SendMessageW (GetDlgItem (global.hwnd, IDC_PROGRESS_BAR), PBM_SETSTEP, 1, 0);
+      SendMessageW (GetDlgItem (global.hwnd, IDC_PROGRESS_BAR), PBM_STEPIT, 0, 0);
 
       char dst[64];
       char ext[32];
       _splitpath (file.chars (), nullptr, nullptr, dst, ext);
 
-      SetDlgItemTextA (global.hwnd, IDC_STATUS, strings.format (lang.tr (Lang::CopyingFiles), num, inst.getFileCount (), dst, ext));
+      setText (IDC_STATUS, strings.format (lang.tr (Lang::CopyingFiles), num, inst.getFileCount (), dst, ext));
       Sleep (30);
 
       if (num == static_cast <uint32> (inst.getFileCount ())) {
-         SetDlgItemTextA (global.hwnd, IDC_STATUS, lang.tr (Lang::PatchingFiles));
+         setText (IDC_STATUS, lang.tr (Lang::PatchingFiles));
          Sleep (800);
       }
    }
@@ -505,8 +556,7 @@ public:
       if (result) {
          return result;
       }
-
-      auto resHandle = FindResourceA (global.inst, MAKEINTRESOURCEA (resId), "PNG");
+      auto resHandle = FindResourceW (global.inst, MAKEINTRESOURCEW (resId), L"PNG");
 
       if (!resHandle) {
          return nullptr;
@@ -556,59 +606,62 @@ public:
       return nullptr;
    }
 
-
    static DWORD CR_STDCALL thread (CONST LPVOID) {
       auto &inst = BotSetup::instance ();
       global.install = true;
 
       EnableWindow (GetDlgItem (global.hwnd, IDOK), FALSE);
-      SetDlgItemTextA (global.hwnd, IDCANCEL, lang.tr (Lang::Cancel));
+      setText (IDCANCEL, lang.tr (Lang::Cancel));
 
       ShowWindow (GetDlgItem (global.hwnd, IDC_BROWSE), SW_HIDE);
-      ShowWindow (GetDlgItem (global.hwnd, IDC_EDIT2), SW_HIDE);
+      ShowWindow (GetDlgItem (global.hwnd, IDC_INSTALL_PATH), SW_HIDE);
 
       ShowWindow (GetDlgItem (global.hwnd, IDC_STATUS), SW_SHOW);
-      ShowWindow (GetDlgItem (global.hwnd, IDC_PROGRESS1), SW_SHOW);
+      ShowWindow (GetDlgItem (global.hwnd, IDC_PROGRESS_BAR), SW_SHOW);
+
+      inst.setText (IDC_TEXT_INFO, lang.tr (Lang::InfoText2));
 
       global.target.trim ();
 
       if (inst.install (global.target, BotSetup::progress)) {
-         SetDlgItemTextA (global.hwnd, IDCANCEL, lang.tr (Lang::Exit));
-         SetDlgItemTextA (global.hwnd, IDC_STATUS, lang.tr (Lang::Done));
+         setText (IDCANCEL, lang.tr (Lang::Exit));
+         setText (IDC_STATUS, lang.tr (Lang::Done));
 
-         auto pb = GetDlgItem (global.hwnd, IDC_PROGRESS1);
+         auto pb = GetDlgItem (global.hwnd, IDC_PROGRESS_BAR);
 
-         SetWindowLongA (pb, GWL_STYLE, GetWindowLongA (pb, GWL_STYLE) | PBS_MARQUEE);
+         SetWindowLongW (pb, GWL_STYLE, GetWindowLongW (pb, GWL_STYLE) | PBS_MARQUEE);
 
-         SendMessageA (pb, (UINT) PBM_SETMARQUEE, (WPARAM) 1, (LPARAM) nullptr);
+         SendMessageW (pb, (UINT) PBM_SETMARQUEE, (WPARAM) 1, (LPARAM) nullptr);
          UpdateWindow (pb);
       }
       else {
          EnableWindow (GetDlgItem (global.hwnd, IDOK), TRUE);
 
          ShowWindow (GetDlgItem (global.hwnd, IDC_BROWSE), SW_SHOW);
-         ShowWindow (GetDlgItem (global.hwnd, IDC_EDIT2), SW_SHOW);
+         ShowWindow (GetDlgItem (global.hwnd, IDC_INSTALL_PATH), SW_SHOW);
 
-         ShowWindow (GetDlgItem (global.hwnd, IDC_PROGRESS1), SW_HIDE);
-         MessageBoxA (global.hwnd, lang.tr (Lang::BadGameDirectory), lang.tr (Lang::Application), MB_TOPMOST | MB_ICONEXCLAMATION);
+         ShowWindow (GetDlgItem (global.hwnd, IDC_PROGRESS_BAR), SW_HIDE);
+
+         inst.error (lang.tr (Lang::BadGameDirectory));
       }
 
       global.install = false;
       ExitThread (EXIT_SUCCESS);
    }
 
-   void addTooltip (StringRef text, int32 id) {
+   void addTooltip (String text, int32 id) {
       TOOLINFO ti {};
+
       ti.cbSize = sizeof (TOOLINFO);
       ti.uFlags = TTF_SUBCLASS | TTF_IDISHWND;
       ti.hwnd = global.hwnd;
       ti.uId = (WPARAM) GetDlgItem (global.hwnd, id);
-      ti.lpszText = const_cast <LPSTR> (text.chars ());
-
-      SendMessageA (global.tip, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &ti);
+      ti.lpszText = const_cast <char *> (text.chars ());
+      
+      SendMessageW (global.tip, TTM_ADDTOOL, 0, reinterpret_cast <LPARAM> (&ti));
    };
 
-   static void detectSetupDirectory (void) {
+   static void detectSetupDirectory () {
       auto &inst = BotSetup::instance ();
 
       HKEY key;
@@ -640,10 +693,10 @@ public:
          if (inst.dirExists (res)) {
             global.target = res;
 
-            SetDlgItemTextA (global.hwnd, IDOK, lang.tr (Lang::Install));
-            SetDlgItemTextA (global.hwnd, IDC_EDIT2, inst.shrinkPath (res.lowercase (), kShrinkPathAmount).chars ());
+            inst.setText (IDOK, lang.tr (Lang::Install));
+            inst.setText (IDC_INSTALL_PATH, inst.shrinkPath (res.lowercase (), kShrinkPathAmount).chars ());
 
-            inst.addTooltip (const_cast <char *> (res.lowercase ().chars ()), IDC_EDIT2);
+            inst.addTooltip (res.lowercase (), IDC_INSTALL_PATH);
 
             EnableWindow (GetDlgItem (global.hwnd, IDOK), TRUE);
             return true;
@@ -665,12 +718,13 @@ public:
 
 private:
    HashMap <int32, Callback> m_urls;
-   LOGFONT lf {};
+   LOGFONTW lf {};
    HCURSOR m_hand;
 
 public:
    UrlWrap () {
-      GetObjectA (GetStockObject (DEFAULT_GUI_FONT), sizeof (LOGFONT), &lf);
+      GetObjectW (GetStockObject (DEFAULT_GUI_FONT), sizeof (LOGFONTW), &lf);
+
       m_hand = LoadCursorA (nullptr, IDC_HAND);
    }
 
@@ -706,7 +760,7 @@ public:
          handle = true;
 
          SetBkMode (HDC (w), TRANSPARENT);
-         SetTextColor (HDC (w), RGB (34, 0, 204));
+         SetTextColor (HDC (w), RGB (255, 21, 11));
       });
 
       return handle;
@@ -715,13 +769,13 @@ public:
    void push (int id, Callback action, int w = 8, int h = 4) {
       m_urls[id] = action;
 
-      auto font = CreateFontA (-w, h,
+      auto font = CreateFontW (-w, h,
                                lf.lfEscapement, lf.lfOrientation, FW_DEMIBOLD,
-                               lf.lfItalic, 1, lf.lfStrikeOut, lf.lfCharSet,
-                               lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
+                               lf.lfItalic, 0, lf.lfStrikeOut, lf.lfCharSet,
+                               lf.lfOutPrecision, lf.lfClipPrecision, ANTIALIASED_QUALITY,
                                lf.lfPitchAndFamily, lf.lfFaceName);
 
-      SendMessageA (GetDlgItem (global.hwnd, id), WM_SETFONT, (WPARAM) font, 0);
+      SendMessageW (GetDlgItem (global.hwnd, id), WM_SETFONT, (WPARAM) font, 0);
    }
 };
 
@@ -730,18 +784,18 @@ CR_EXPOSE_GLOBAL_SINGLETON (UrlWrap, urls);
 
 LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
    auto enableTransparency = [&] (HWND hwnd, BYTE opacity) {
-      auto wl = GetWindowLongA (hwnd, GWL_EXSTYLE);
+      auto wl = GetWindowLongW (hwnd, GWL_EXSTYLE);
 
       if (opacity < 100) {
          if ((wl & WS_EX_LAYERED) == 0) {
-            SetWindowLongA (hwnd, GWL_EXSTYLE, wl | WS_EX_LAYERED);
+            SetWindowLongW (hwnd, GWL_EXSTYLE, wl | WS_EX_LAYERED);
          }
          SetLayeredWindowAttributes (hwnd, 0, (255 * opacity) / 100, LWA_ALPHA);
          RedrawWindow (hwnd, nullptr, nullptr, RDW_INVALIDATE | RDW_UPDATENOW);
       }
       else {
          if ((wl & WS_EX_LAYERED) != 0) {
-            SetWindowLongA (hwnd, GWL_EXSTYLE, wl & ~WS_EX_LAYERED);
+            SetWindowLongW (hwnd, GWL_EXSTYLE, wl & ~WS_EX_LAYERED);
          }
          RedrawWindow (hwnd, nullptr, nullptr, RDW_INVALIDATE | RDW_UPDATENOW);
       }
@@ -753,66 +807,61 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
    case WM_INITDIALOG:
    {
       global.hwnd = hwnd;
-      global.tip = CreateWindowExA (WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL, TTS_NOPREFIX | TTS_BALLOON, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, global.inst, NULL);
+      global.tip = CreateWindowExW (WS_EX_TOPMOST, TOOLTIPS_CLASSW, NULL, TTS_NOPREFIX | TTS_BALLOON, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, global.inst, NULL);
 
       urls.push (IDC_BOTVER, [&] () {
-         ShellExecuteA (hwnd, "open", "https://yapb.jeefo.net", nullptr, nullptr, SW_SHOWNORMAL);
+         ShellExecuteW (hwnd, L"open", L"https://yapb.jeefo.net", nullptr, nullptr, SW_SHOWNORMAL);
       });
-      global.mutex = CreateMutexA (nullptr, TRUE, "BotSetupMutexHandle");
+      global.mutex = CreateMutexW (nullptr, TRUE, L"YaPBSetupMutexHandle");
 
       if (GetLastError () == ERROR_ALREADY_EXISTS) {
          PostQuitMessage (EXIT_FAILURE);
       }
-      SetWindowTextA (hwnd, lang.tr (Lang::Application));
+      SetWindowTextW (hwnd, global.title);
 
-      LOGFONT lf;
-      GetObjectA (GetStockObject (DEFAULT_GUI_FONT), sizeof (LOGFONT), &lf);
+      LOGFONTW lf;
+      GetObjectW (GetStockObject (DEFAULT_GUI_FONT), sizeof (LOGFONTW), &lf);
 
-      auto fontSmall = CreateFontA (lf.lfHeight, 4,
+      auto fontSmall = CreateFontW (lf.lfHeight, 4,
                                     lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
                                     lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
                                     lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
                                     lf.lfPitchAndFamily, lf.lfFaceName);
 
-      auto fontDialog = CreateFontA (8, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET,
+      auto fontDialog = CreateFontW (8, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET,
                                      OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                      DEFAULT_PITCH | FF_DONTCARE, lf.lfFaceName);
 
-      SendMessageA (GetDlgItem (hwnd, IDC_EDIT2), WM_SETFONT, (WPARAM) fontSmall, 0);
-      SendMessageA (hwnd, WM_SETFONT, (WPARAM) fontDialog, 0);
+      SendMessageW (GetDlgItem (hwnd, IDC_INSTALL_PATH), WM_SETFONT, (WPARAM) fontSmall, 0);
+      SendMessageW (hwnd, WM_SETFONT, (WPARAM) fontDialog, 0);
 
-      SetClassLongA (hwnd, GCL_HICON, (LONG) LoadIcon (global.inst, MAKEINTRESOURCE (IDI_ICON)));
+      SetClassLongW (hwnd, GCL_HICON, (LONG) LoadIconW (global.inst, MAKEINTRESOURCEW (IDI_ICON)));
 
-      enableTransparency (hwnd, 75);
-      SetDlgItemTextA (hwnd, IDC_BOTVER, strings.format (lang.tr (Lang::Version), setup.getBotVersion ()));
+      enableTransparency (hwnd, 70);
+      setup.setText (IDC_BOTVER, strings.format (lang.tr (Lang::Version), setup.getBotVersion ()));
 
-      SetDlgItemTextA (hwnd, IDC_BROWSE, lang.tr (Lang::Browse));
-      SetDlgItemTextA (hwnd, IDCANCEL, lang.tr (Lang::Exit));
-      SetDlgItemTextA (hwnd, IDOK, lang.tr (Lang::SelectExeFile));
+      setup.setText (IDC_BROWSE, lang.tr (Lang::Browse));
+      setup.setText (IDCANCEL, lang.tr (Lang::Exit));
+      setup.setText (IDOK, lang.tr (Lang::SelectExeFile));
 
-      SetDlgItemTextA (hwnd, IDC_TEXT_INFO, lang.tr (Lang::InfoText));
+      setup.setText (IDC_TEXT_INFO, lang.tr (Lang::InfoText));
 
-      AppendMenuA (GetSystemMenu (hwnd, FALSE), MF_SEPARATOR, 0, nullptr);
-      AppendMenuA (GetSystemMenu (hwnd, FALSE), MF_STRING, 0xDEADBEEF, lang.tr (Lang::LicenseInfo));
+      AppendMenuW (GetSystemMenu (hwnd, FALSE), MF_SEPARATOR, 0, nullptr);
+      AppendMenuW (GetSystemMenu (hwnd, FALSE), MF_STRING, 0xDEADBEEF, lang.trw (Lang::LicenseInfo));
 
       SetTimer (hwnd, 1, 350, 0);
-
-      setup.addTooltip (const_cast <char *> (lang.tr (Lang::SelectExeFile)), IDC_BROWSE);
-      setup.addTooltip ("https://yapb.jeefo.net/", IDC_BOTVER);
    }
    break;
 
    case WM_TIMER:
-   {
       KillTimer (hwnd, 1);
       BotSetup::detectSetupDirectory ();
-   }
    break;
 
    case WM_ACTIVATEAPP:
    case WM_PAINT:
    {
-      auto icon = setup.loadPNG (IDB_PNG1);
+      auto icon = setup.loadPNG (IDB_LOGO);
 
       if (icon) {
          SetLayeredWindowAttributes (hwnd, 255, 255, LWA_COLORKEY);
@@ -823,7 +872,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
             enableTransparency (itm, 100);
          };
 
-         for (const auto &itm : IntArray { IDCANCEL, IDOK, IDC_PROGRESS1, IDC_BROWSE, IDC_EDIT2, IDC_STATUS, IDC_BOTVER, IDC_TEXT_INFO }) {
+         for (const auto &itm : IntArray { IDCANCEL, IDOK, IDC_PROGRESS_BAR, IDC_BROWSE, IDC_INSTALL_PATH, IDC_STATUS, IDC_BOTVER, IDC_TEXT_INFO }) {
             display (itm);
          }
       }
@@ -832,11 +881,10 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
 
    case WM_COMMAND:
       switch (LOWORD (wParam)) {
-
       case IDCANCEL:
          global.pause = true;
 
-         if ((global.install && MessageBoxA (hwnd, lang.tr (lang.CancelCopy), lang.tr (Lang::Application), MB_ICONQUESTION | MB_YESNO) == IDYES) || !global.install) {
+         if ((global.install && MessageBoxW (hwnd, lang.trw (lang.CancelCopy), global.title, MB_ICONQUESTION | MB_YESNO) == IDYES) || !global.install) {
             PostQuitMessage (EXIT_SUCCESS);
          }
          global.pause = false;
@@ -856,7 +904,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
          ofn.lpstrFile = filename;
          ofn.lpstrFile[0] = kNullChar;
          ofn.nMaxFile = StringBuffer::StaticBufferSize;
-         ofn.lpstrFilter = lang.tr (Lang::SelectHLExeFile);
+         ofn.lpstrFilter = "Half-Life EXE (hl.exe/hlds.exe)\0hl.exe;hlds.exe;xash.exe;xash_vc.exe;xash_mingw.exe\0";
          ofn.nFilterIndex = 1;
          ofn.lpstrFileTitle = nullptr;
          ofn.nMaxFileTitle = 0;
@@ -876,10 +924,10 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
             if (setup.dirExists (res)) {
                global.target = res;
 
-               SetDlgItemTextA (global.hwnd, IDOK, lang.tr (Lang::Install));
-               SetDlgItemTextA (hwnd, IDC_EDIT2, setup.shrinkPath (res.lowercase (), kShrinkPathAmount).chars ());
+               setup.setText (IDOK, lang.tr (Lang::Install));
+               setup.setText (IDC_INSTALL_PATH, setup.shrinkPath (res.lowercase (), kShrinkPathAmount).chars ());
 
-               setup.addTooltip (const_cast <char *> (res.lowercase ().chars ()), IDC_EDIT2);
+               setup.addTooltip (res.lowercase (), IDC_INSTALL_PATH);
 
                EnableWindow (GetDlgItem (hwnd, IDOK), TRUE);
             }
@@ -907,7 +955,7 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
          SetBkMode (HDC (wParam), TRANSPARENT);
          SetTextColor (HDC (wParam), RGB (34, 0, 204));
       }
-      else if (HWND (lParam) == GetDlgItem (hwnd, IDC_EDIT2)) {
+      else if (HWND (lParam) == GetDlgItem (hwnd, IDC_INSTALL_PATH)) {
          SetBkMode ((HDC) wParam, TRANSPARENT);
          SetTextColor (GetDC (HWND (lParam)), RGB (255, 255, 255));
       }
@@ -928,7 +976,8 @@ LRESULT CR_STDCALL installerProcedure (HWND hwnd, UINT message, WPARAM wParam, L
 }
 
 int CR_STDCALL WinMain (HINSTANCE instance, HINSTANCE, LPSTR, int) {
-   lang.trySet ();
+   lang.startup ();
+   setup.startup ();
 
    GdiplusStartupInput gdiplusStartupInput;
    ULONG_PTR gdiplusToken;
@@ -942,20 +991,20 @@ int CR_STDCALL WinMain (HINSTANCE instance, HINSTANCE, LPSTR, int) {
    InitCommonControlsEx (&controls);
 
    global.inst = instance;
-   global.hwnd = CreateDialogA (global.inst, MAKEINTRESOURCE (IDD_SETUP_DIALOG), nullptr, (DLGPROC) installerProcedure);
+   global.hwnd = CreateDialogW (global.inst, MAKEINTRESOURCEW (IDD_SETUP_DIALOG), nullptr, (DLGPROC) installerProcedure);
 
    ShowWindow (global.hwnd, SW_SHOW);
 
    Twin <BOOL, MSG> pump;
 
-   while ((pump.first = GetMessageA (&pump.second, nullptr, 0, 0)) != 0) {
+   while ((pump.first = GetMessageW (&pump.second, nullptr, 0, 0)) != 0) {
       if (pump.first == -1) {
          return -1;
       }
 
-      if (!IsDialogMessageA (global.hwnd, &pump.second)) {
+      if (!IsDialogMessageW (global.hwnd, &pump.second)) {
          TranslateMessage (&pump.second);
-         DispatchMessageA (&pump.second);
+         DispatchMessageW (&pump.second);
       }
    }
    return EXIT_SUCCESS;

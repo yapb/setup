@@ -3,16 +3,12 @@
 // Used by botsetup.rc
 //
 #define IDD_SETUP_DIALOG                101
-#define IDB_BITMAP1                     102
-#define IDI_ICON1                       103
 #define IDI_ICON                        103
-#define IDB_PNG1                        112
+#define IDB_LOGO                        112
 #define IDR_RT_MANIFEST1                113
-#define IDC_EDIT2                       1003
-#define IDC_BUTTON1                     1004
+#define IDC_INSTALL_PATH                1003
 #define IDC_BROWSE                      1004
-#define IDC_STATIC2                     1005
-#define IDC_PROGRESS1                   1006
+#define IDC_PROGRESS_BAR                1006
 #define IDC_BOTVER                      1008
 #define IDC_STATUS                      1009
 #define IDC_URL                         1010
